@@ -1,0 +1,35 @@
+{
+  "build_command": "pnpm run build",
+  "capabilities": [],
+  "dev_command": "pnpm run dev",
+  "env_vars": {},
+  "experiments": null,
+  "git_remote": {
+    "repo_url": "s3://vida-prod-gitrepo/webdev-git/310519663577827755/J2JnCbV3s7CWzP3k2gDjsL",
+    "access_key_id": "ASIAZV3A2ECZNUQEQPTL",
+    "secret_access_key": "vvkyqVf2gSCtxJlNjy4jiLhuP24dSaDtgFYG0z15",
+    "session_token": "IQoJb3JpZ2luX2VjEPD//////////wEaCXVzLWVhc3QtMSJIMEYCIQDynrAXcWmejdpqTMZoFQizgm2QEY6I24c59v1+ChUQiAIhAMCNOL5vJLGp/HBNdKLFhfHyUZ8PikYj+i1XXjahVN2zKv8DCLn//////////wEQBBoMNjY1Mzg2MDk4ODY2Igw6iHDqEfUqIQ+eUQQq0wP/lhymlkkk3blSP1k6JgAJwuY5NZ0+YZGRsrh0AXjoVYKH12gM0wlnRQLp3kE+5TVS0Zltsgnm74pRWtr7k2WyfjH/2QjWtahhQlg1I62e9O8TmxUJqGVCIcihKmMxWby/Gyn1IEyoZBhY+yH5c1vU2QC9sAoDCZmKNx7eTO2aDNepKEP5DlAMOvDD3tSBh0dbgA7f4DB137sjmeKoDztZ2WhFqHgMZbhabVnYM+eUiantfiI0U9eaXxplR321eFUCRP55KK8AROJd9un94hanE8ne6QEAw8wjb5desPhnS05i17VGuKn0W6888b+F4R8PMDSNwcT7pn2UJRQCwiXC11FylXND8W8KsD8ZpXxp9ztOofHyv/2VQa/iGvMuSyjimI/Co5zFboxRNdZDbth09kjn4TM9ZPG2UewnkpU7qwqsSy6SxqsKoAiQV8p3CvV48aRBa2ZGNyEKxNdAH1U3GPW8OzCIp+XcsXV19LKa9CnuQrFVWQ3bqB7PQyxtNQhV2lSRp2pfjWWD73LIRw5lh1tjajvcY6hVuNn2mR7rqi2bNWFTi/g9DY7zbOxvsJJqd9rhNlXgH3oOfqsPNp6kpSeyyZjkXdJZXGF6x7y5EaPR4DDYiqvQBjqcAdvQjVPW7yu0XYblNs/BpOC4aPZcpbjygXzui5ybYMFvHYgqqTeDvYigdM6xmJnCzGL+0jyenXsTxw1Wi2kC/vOxxG2wG33uQB4ViPvoW+XkMj6Tra0oLASZtu3uH8YN5Oh0h+8qVy5wtUCDU8W8Hi7TXo7HDpWGCOEs6PKRktvWKr6ldkvAsCQQ0URhvoZI4FVACa6cdgzpbZVIUg==",
+    "expiration": "2026-05-18T19:52:56.000Z"
+  },
+  "name": "j-craft-site",
+  "path": "/home/ubuntu/j-craft-site",
+  "port": 3000,
+  "secrets": {
+    "BUILT_IN_FORGE_API_KEY": "YCiy8shnVAiERhaMZX2zQF",
+    "BUILT_IN_FORGE_API_URL": "https://forge.manus.ai",
+    "JWT_SECRET": "o5Q6dJRxYeay2rgoxsgjfQ",
+    "OAUTH_SERVER_URL": "https://api.manus.im",
+    "OWNER_NAME": "Junnosuke Nakamura",
+    "OWNER_OPEN_ID": "TP3GNNKJmfvrkzBQCLBnzv",
+    "VITE_ANALYTICS_ENDPOINT": "https://manus-analytics.com",
+    "VITE_ANALYTICS_WEBSITE_ID": "5f0bbaaf-b9b0-4fff-9e82-73c9a9acbe85",
+    "VITE_APP_ID": "J2JnCbV3s7CWzP3k2gDjsL",
+    "VITE_APP_LOGO": "",
+    "VITE_APP_TITLE": "J-Craft 公式サイト",
+    "VITE_FRONTEND_FORGE_API_KEY": "GLGW3kCfVbrZL387jfagZN",
+    "VITE_FRONTEND_FORGE_API_URL": "https://forge.manus.ai",
+    "VITE_OAUTH_PORTAL_URL": "https://manus.im"
+  },
+  "template_id": "web-static",
+  "test_command": "pnpm test"
+}
