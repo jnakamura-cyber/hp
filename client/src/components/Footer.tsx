@@ -3,7 +3,7 @@
  * Design: Industrial Elegance
  * - Dark navy background
  * - 4-column grid layout
- * - Brand info + navigation links
+ * - Brand info + navigation links + legal links
  */
 
 import { Link } from "wouter";
@@ -39,8 +39,9 @@ export default function Footer() {
               {[
                 { label: "概要", href: "/about" },
                 { label: "代表メッセージ", href: "/about#message" },
+                { label: "会員・賛助制度", href: "/about#membership" },
                 { label: "役員・組織", href: "/about#governance" },
-                { label: "情報公開", href: "/about#disclosure" },
+                { label: "情報公開", href: "/disclosure" },
               ].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="text-[13px] text-white/65 hover:text-white transition-colors no-underline">
@@ -60,6 +61,7 @@ export default function Footer() {
                 { label: "教育・研修", href: "/activities#education" },
                 { label: "政策提言", href: "/activities#policy" },
                 { label: "認定制度", href: "/certification" },
+                { label: "加盟申込", href: "/apply" },
               ].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="text-[13px] text-white/65 hover:text-white transition-colors no-underline">
@@ -75,10 +77,10 @@ export default function Footer() {
             <h4 className="text-[11px] tracking-[0.14em] text-white font-semibold mb-4 uppercase">お問い合わせ</h4>
             <ul className="list-none m-0 p-0 space-y-2.5">
               {[
+                { label: "加盟申込フォーム", href: "/apply" },
                 { label: "企業の方", href: "/#contact" },
                 { label: "行政・自治体", href: "/#contact" },
                 { label: "メディア", href: "/#contact" },
-                { label: "プレスキット", href: "#" },
               ].map((item) => (
                 <li key={item.label}>
                   <a href={item.href} className="text-[13px] text-white/65 hover:text-white transition-colors no-underline">
@@ -90,17 +92,31 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Legal */}
+        {/* Legal bottom bar */}
         <div
-          className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pt-6"
+          className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pt-6"
           style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}
         >
           <p className="text-[12px] text-white/50 m-0">
             © 2026 一般社団法人 日本建設職人支援機構（J-Craft）
           </p>
-          <p className="text-[11px] text-white/40 m-0">
-            Secretariat operated by クラフトバンク総研
-          </p>
+          <div className="flex flex-wrap gap-4 items-center">
+            <Link href="/privacy" className="text-[11px] text-white/40 hover:text-white/70 transition-colors no-underline">
+              プライバシーポリシー
+            </Link>
+            <span className="text-white/20 text-[11px]">|</span>
+            <Link href="/legal-notice" className="text-[11px] text-white/40 hover:text-white/70 transition-colors no-underline">
+              特定商取引法に基づく表記
+            </Link>
+            <span className="text-white/20 text-[11px]">|</span>
+            <Link href="/disclosure" className="text-[11px] text-white/40 hover:text-white/70 transition-colors no-underline">
+              情報公開
+            </Link>
+            <span className="text-white/20 text-[11px]">|</span>
+            <span className="text-[11px] text-white/40">
+              Secretariat: クラフトバンク総研
+            </span>
+          </div>
         </div>
       </div>
     </footer>

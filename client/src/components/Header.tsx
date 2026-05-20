@@ -15,7 +15,7 @@ const navItems = [
   { label: "機構について", href: "/about" },
   { label: "3つの取り組み", href: "/activities" },
   { label: "認定制度", href: "/certification" },
-  { label: "ニュース", href: "/#news" },
+  { label: "情報公開", href: "/disclosure" },
   { label: "お問い合わせ", href: "/#contact" },
 ];
 
@@ -113,11 +113,11 @@ export default function Header() {
               })}
             </ul>
             <Link
-              href="/certification#apply"
+              href="/apply"
               className="inline-flex items-center gap-2 bg-[#C8442A] text-white text-[13px] font-semibold px-4 py-2.5 tracking-wide no-underline transition-all duration-150 hover:bg-[#b03922] active:scale-[0.97]"
               style={{ borderRadius: "2px" }}
             >
-              認定申請
+              加盟申込
               <span className="font-normal">→</span>
             </Link>
           </nav>
@@ -163,11 +163,11 @@ export default function Header() {
             </ul>
             <div className="pt-4">
               <Link
-                href="/certification#apply"
+                href="/apply"
                 className="block w-full text-center bg-[#C8442A] text-white text-[14px] font-semibold py-3 no-underline hover:bg-[#b03922] transition-colors"
                 style={{ borderRadius: "2px" }}
               >
-                認定申請 →
+                加盟申込 →
               </Link>
             </div>
           </div>
