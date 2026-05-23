@@ -217,7 +217,7 @@ export default function About() {
                 会員・賛助会員制度
               </h2>
               <p className="text-[15px] leading-loose text-[#1F1F1F] mb-8">
-                J-Craftは加盟会費を無料とし、運営資金はクラフトバンク株式会社の拠出を主財源とします。将来的には賛助会員制度を通じて、産業全体で機構を支える体制を構築していきます。
+                J-Craftはすべての会員区分において会費を無料とします。運営資金はクラフトバンク株式会社の拠出を主財源とし、産業全体で機構を支える体制を構築していきます。
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
@@ -237,7 +237,7 @@ export default function About() {
                   {
                     type: "賛助会員（法人）",
                     target: "建設関連企業・金融機関等",
-                    fee: "年間 30万円〜（予定）",
+                    fee: "無料",
                     benefits: [
                       "機構活動報告書の提供",
                       "イベント・セミナーへの招待",
@@ -249,7 +249,7 @@ export default function About() {
                   {
                     type: "賛助会員（個人）",
                     target: "研究者・実務家・有識者",
-                    fee: "年間 1万円〜（予定）",
+                    fee: "無料",
                     benefits: [
                       "機構活動報告書の提供",
                       "研究会・勉強会への参加",
@@ -288,7 +288,7 @@ export default function About() {
               <div className="bg-[#0E1A30]/5 border border-[#0E1A30]/10 px-6 py-5" style={{ borderRadius: "2px" }}>
                 <p className="text-[#444] text-[14px] leading-loose">
                   <strong className="text-[#0E1A30]">収益モデルについて：</strong>
-                  当機構の主財源はクラフトバンク株式会社からの拠出金（年間1,000万円規模）です。加盟会費は無料とし、将来的に賛助会員制度・有料研修プログラムにより財務的自立を目指します。収支は毎年度の事業報告書にて公開します。
+                  当機構の主財源はクラフトバンク株式会社からの拠出金（年間1,000万円規模）です。すべての会員区分において会費を無料とし、将来的には有料研修プログラム等により財務的自立を目指します。収支は毎年度の事業報告書にて公開します。
                 </p>
               </div>
             </div>
