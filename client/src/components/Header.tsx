@@ -56,7 +56,7 @@ export default function Header() {
       }`}
     >
       <div className="container">
-        <div className="flex items-center justify-between h-[72px] gap-6">
+          <div className="flex items-center justify-between h-[60px] sm:h-[72px] gap-4 sm:gap-6">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 no-underline group">
             <div
@@ -71,7 +71,7 @@ export default function Header() {
               >
                 日本建設職人支援機構
               </div>
-              <div className="text-[10px] font-medium text-[#6B6B6B] tracking-[0.06em] mt-0.5">
+              <div className="hidden sm:block text-[10px] font-medium text-[#6B6B6B] tracking-[0.06em] mt-0.5">
                 JAPAN CRAFT WORKERS SUPPORT ORGANIZATION
               </div>
             </div>

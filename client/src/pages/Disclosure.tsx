@@ -65,8 +65,8 @@ export default function Disclosure() {
       <Header />
 
       {/* Page Header */}
-      <div className="bg-[#0E1A30] py-16">
-        <div className="container">
+      <div className="bg-[#0E1A30] pt-[60px] sm:pt-[72px] pb-10 sm:pb-16">
+        <div className="container pt-8 sm:pt-12">
           <div className="flex items-center gap-3 mb-4">
             <span className="block w-8 h-px bg-[#C8442A]" />
             <span className="text-[11px] font-semibold tracking-[0.2em] text-[#C8442A] uppercase">

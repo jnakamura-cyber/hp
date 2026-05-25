@@ -75,8 +75,8 @@ export default function Apply() {
     <div className="min-h-screen bg-[#F7F6F2]">
       <Header />
 
-      <section className="relative pt-[72px] pb-16 bg-[#0E1A30]">
-        <div className="container pt-16 relative z-10">
+      <section className="relative pt-[60px] sm:pt-[72px] pb-12 sm:pb-16 bg-[#0E1A30]">
+        <div className="container pt-10 sm:pt-16 relative z-10">
           <nav className="text-[12px] text-white/60 mb-5 tracking-wide">
             <Link href="/" className="text-white/60 hover:text-white no-underline transition-colors">HOME</Link>
             <span className="mx-2">/</span>
@@ -176,7 +176,7 @@ export default function Apply() {
                         <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
                           個人・法人の区別 <span className="text-[#C8442A]">*</span>
                         </label>
-                        <div className="flex gap-4">
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                           {["個人（職人）", "法人（専門工事会社）"].map((opt) => (
                             <label key={opt} className="flex items-center gap-2 text-[14px] text-[#444] cursor-pointer">
                               <input

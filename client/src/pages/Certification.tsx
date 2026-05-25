@@ -109,7 +109,7 @@ export default function Certification() {
       <Header />
 
       <section
-        className="relative pt-[72px] pb-20 overflow-hidden"
+        className="relative pt-[60px] sm:pt-[72px] pb-14 sm:pb-20 overflow-hidden"
         style={{
           background: "#0E1A30",
           backgroundImage: `linear-gradient(120deg, rgba(14,26,48,0.90) 0%, rgba(14,26,48,0.70) 100%), url(${CERT_BG})`,
@@ -117,7 +117,7 @@ export default function Certification() {
           backgroundPosition: "center",
         }}
       >
-        <div className="container pt-16 relative z-10">
+        <div className="container pt-10 sm:pt-16 relative z-10">
           <nav className="text-[12px] text-white/60 mb-5 tracking-wide">
             <Link href="/" className="text-white/60 hover:text-white no-underline transition-colors">HOME</Link>
             <span className="mx-2">/</span>
@@ -132,9 +132,9 @@ export default function Certification() {
         </div>
       </section>
 
-      <div className="bg-white border-b border-[#E8E4DC] sticky top-[64px] z-30">
+      <div className="bg-white border-b border-[#E8E4DC] sticky top-[60px] sm:top-[72px] z-30">
         <div className="container">
-          <div className="flex gap-6 overflow-x-auto py-3 text-[13px] font-medium">
+          <div className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide py-3 text-[13px] font-medium">
             {[
               { label: "認定の概要", href: "#overview" },
               { label: "認証の対象", href: "#target" },
@@ -260,7 +260,8 @@ export default function Certification() {
                 費用
               </h2>
               <div className="border border-[#E5E3DD] overflow-hidden mb-5" style={{ borderRadius: "2px" }}>
-                <div className="grid grid-cols-3 bg-[#0E1A30] text-white text-[12px] font-semibold tracking-[0.1em]">
+                {/* Desktop header */}
+                <div className="hidden sm:grid grid-cols-3 bg-[#0E1A30] text-white text-[12px] font-semibold tracking-[0.1em]">
                   <div className="px-5 py-3">項目</div>
                   <div className="px-5 py-3 border-l border-white/10">金額</div>
                   <div className="px-5 py-3 border-l border-white/10">タイミング</div>
@@ -269,10 +270,19 @@ export default function Certification() {
                   { item: "認定審査料", amount: "10万円（ショット）", timing: "申請時" },
                   { item: "年間認証利用料", amount: "12万円／年", timing: "認証付与後・毎年更新時" },
                 ].map((row, i) => (
-                  <div key={row.item} className="grid grid-cols-3 border-t border-[#E5E3DD] text-[14px]" style={{ background: i % 2 === 0 ? "white" : "#FAFAF8" }}>
-                    <div className="px-5 py-4 font-semibold text-[#0E1A30]">{row.item}</div>
-                    <div className="px-5 py-4 text-[#C8442A] font-semibold border-l border-[#E5E3DD]">{row.amount}</div>
-                    <div className="px-5 py-4 text-[#666] border-l border-[#E5E3DD]">{row.timing}</div>
+                  <div key={row.item} className="border-t border-[#E5E3DD]" style={{ background: i % 2 === 0 ? "white" : "#FAFAF8" }}>
+                    {/* Mobile: stacked */}
+                    <div className="flex sm:hidden flex-col px-5 py-4 gap-1">
+                      <div className="font-semibold text-[#0E1A30] text-[14px]">{row.item}</div>
+                      <div className="text-[#C8442A] font-semibold text-[15px]">{row.amount}</div>
+                      <div className="text-[#666] text-[13px]">{row.timing}</div>
+                    </div>
+                    {/* Desktop: columns */}
+                    <div className="hidden sm:grid grid-cols-3 text-[14px]">
+                      <div className="px-5 py-4 font-semibold text-[#0E1A30]">{row.item}</div>
+                      <div className="px-5 py-4 text-[#C8442A] font-semibold border-l border-[#E5E3DD]">{row.amount}</div>
+                      <div className="px-5 py-4 text-[#666] border-l border-[#E5E3DD]">{row.timing}</div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -322,21 +332,30 @@ export default function Certification() {
                 認定審査委員会は、理事2名に加え、学識経験者（大学教授・研究者）1〜2名および国交省OB 1名を加えた計3〜5名で構成します。第三者が関与する審査体制により、認証の客観性・中立性を担保します。
               </p>
               <div className="border border-[#E5E3DD] overflow-hidden mb-6" style={{ borderRadius: "2px" }}>
-                <div className="grid grid-cols-3 bg-[#0E1A30] text-white text-[12px] font-semibold tracking-[0.1em]">
+                {/* Desktop header */}
+                <div className="hidden sm:grid grid-cols-3 bg-[#0E1A30] text-white text-[12px] font-semibold tracking-[0.1em]">
                   <div className="px-5 py-3">役割</div>
                   <div className="px-5 py-3 border-l border-white/10">人数</div>
                   <div className="px-5 py-3 border-l border-white/10">候補</div>
                 </div>
                 {[
                   { role: "理事", count: "2名", candidate: "松永先生・韓（または矢吹先生）" },
-                  { role: "学識経験者", count: "1〜2名", candidate: "大学教授・研究者（建設経営・労働政策等）" },
+                  { role: "学識経験者", count: "1～2名", candidate: "大学教授・研究者（建設経営・労働政策等）" },
                   { role: "国交省OB", count: "1名", candidate: "総合政策局・建設業政策ラインのOB" },
-                  { role: "合計", count: "3〜5名", candidate: "—" },
+                  { role: "合計", count: "3～5名", candidate: "—" },
                 ].map((row, i) => (
-                  <div key={row.role} className="grid grid-cols-3 border-t border-[#E5E3DD] text-[14px]" style={{ background: i === 3 ? "#F7F6F2" : i % 2 === 0 ? "white" : "#FAFAF8", fontWeight: i === 3 ? "600" : "400" }}>
-                    <div className="px-5 py-4 text-[#0E1A30]">{row.role}</div>
-                    <div className="px-5 py-4 text-[#444] border-l border-[#E5E3DD]">{row.count}</div>
-                    <div className="px-5 py-4 text-[#666] border-l border-[#E5E3DD]">{row.candidate}</div>
+                  <div key={row.role} className="border-t border-[#E5E3DD]" style={{ background: i === 3 ? "#F7F6F2" : i % 2 === 0 ? "white" : "#FAFAF8", fontWeight: i === 3 ? "600" : "400" }}>
+                    {/* Mobile: stacked */}
+                    <div className="flex sm:hidden flex-col px-4 py-3 gap-1">
+                      <div className="font-semibold text-[#0E1A30] text-[13px]">{row.role}</div>
+                      <div className="text-[#444] text-[13px]">{row.count}　<span className="text-[#666]">{row.candidate}</span></div>
+                    </div>
+                    {/* Desktop: columns */}
+                    <div className="hidden sm:grid grid-cols-3 text-[14px]">
+                      <div className="px-5 py-4 text-[#0E1A30]">{row.role}</div>
+                      <div className="px-5 py-4 text-[#444] border-l border-[#E5E3DD]">{row.count}</div>
+                      <div className="px-5 py-4 text-[#666] border-l border-[#E5E3DD]">{row.candidate}</div>
+                    </div>
                   </div>
                 ))}
               </div>

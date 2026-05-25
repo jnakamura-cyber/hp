@@ -10,7 +10,7 @@ import { Link } from "wouter";
 
 export default function Footer() {
   return (
-    <footer style={{ background: "#0E1A30" }} className="text-white/70 pt-16 pb-8">
+    <footer style={{ background: "#0E1A30" }} className="text-white/70 pt-12 sm:pt-16 pb-8">
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
@@ -100,19 +100,19 @@ export default function Footer() {
           <p className="text-[12px] text-white/50 m-0">
             © 2026 一般社団法人 日本建設職人支援機構（J-Craft）
           </p>
-          <div className="flex flex-wrap gap-4 items-center">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-4 items-start sm:items-center">
             <Link href="/privacy" className="text-[11px] text-white/40 hover:text-white/70 transition-colors no-underline">
               プライバシーポリシー
             </Link>
-            <span className="text-white/20 text-[11px]">|</span>
+            <span className="hidden sm:inline text-white/20 text-[11px]">|</span>
             <Link href="/legal-notice" className="text-[11px] text-white/40 hover:text-white/70 transition-colors no-underline">
               特定商取引法に基づく表記
             </Link>
-            <span className="text-white/20 text-[11px]">|</span>
+            <span className="hidden sm:inline text-white/20 text-[11px]">|</span>
             <Link href="/disclosure" className="text-[11px] text-white/40 hover:text-white/70 transition-colors no-underline">
               情報公開
             </Link>
-            <span className="text-white/20 text-[11px]">|</span>
+            <span className="hidden sm:inline text-white/20 text-[11px]">|</span>
             <span className="text-[11px] text-white/40">
               Secretariat: クラフトバンク総研
             </span>

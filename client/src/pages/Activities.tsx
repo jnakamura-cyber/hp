@@ -37,7 +37,7 @@ export default function Activities() {
 
       {/* Page Header */}
       <section
-        className="relative pt-[72px] pb-20 overflow-hidden"
+        className="relative pt-[60px] sm:pt-[72px] pb-14 sm:pb-20 overflow-hidden"
         style={{
           background: "#0E1A30",
           backgroundImage: `linear-gradient(120deg, rgba(14,26,48,0.90) 0%, rgba(14,26,48,0.65) 100%), url(${ACTIVITIES_BG})`,
@@ -45,7 +45,7 @@ export default function Activities() {
           backgroundPosition: "center",
         }}
       >
-        <div className="container pt-16 relative z-10">
+        <div className="container pt-10 sm:pt-16 relative z-10">
           <nav className="text-[12px] text-white/60 mb-5 tracking-wide">
             <Link href="/" className="text-white/60 hover:text-white no-underline transition-colors">HOME</Link>
             <span className="mx-2">／</span>
@@ -61,7 +61,7 @@ export default function Activities() {
       </section>
 
       {/* Activity 01: Partnership */}
-      <section className="py-20 bg-white border-b border-[#E5E3DD]" id="partnership">
+      <section className="py-14 sm:py-20 bg-white border-b border-[#E5E3DD]" id="partnership">
         <div className="container">
           <div ref={partnerRef} className="reveal">
             <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-12">
@@ -121,7 +121,7 @@ export default function Activities() {
       </section>
 
       {/* Activity 02: Education */}
-      <section className="py-20 bg-[#F7F6F2] border-b border-[#E5E3DD]" id="education">
+      <section className="py-14 sm:py-20 bg-[#F7F6F2] border-b border-[#E5E3DD]" id="education">
         <div className="container">
           <div ref={educationRef} className="reveal">
             <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-12">
@@ -183,7 +183,7 @@ export default function Activities() {
       </section>
 
       {/* Activity 03: Policy */}
-      <section className="py-20 bg-white" id="policy">
+      <section className="py-14 sm:py-20 bg-white" id="policy">
         <div className="container">
           <div ref={policyRef} className="reveal">
             <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-12">

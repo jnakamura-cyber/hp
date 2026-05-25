@@ -41,7 +41,7 @@ export default function About() {
 
       {/* Page Header */}
       <section
-        className="relative pt-[72px] pb-20 overflow-hidden"
+        className="relative pt-[60px] sm:pt-[72px] pb-14 sm:pb-20 overflow-hidden"
         style={{
           background: "#0E1A30",
           backgroundImage: `linear-gradient(120deg, rgba(14,26,48,0.92) 0%, rgba(14,26,48,0.72) 100%), url(${ABOUT_BG})`,
@@ -49,7 +49,7 @@ export default function About() {
           backgroundPosition: "center",
         }}
       >
-        <div className="container pt-16 relative z-10">
+        <div className="container pt-10 sm:pt-16 relative z-10">
           <nav className="text-[12px] text-white/60 mb-5 tracking-wide">
             <Link href="/" className="text-white/60 hover:text-white no-underline transition-colors">HOME</Link>
             <span className="mx-2">／</span>
@@ -65,9 +65,9 @@ export default function About() {
       </section>
 
       {/* Sticky Sub Nav */}
-      <div className="bg-white border-b border-[#E8E4DC] sticky top-[64px] z-30">
+      <div className="bg-white border-b border-[#E8E4DC] sticky top-[60px] sm:top-[72px] z-30">
         <div className="container">
-          <div className="flex gap-6 overflow-x-auto py-3 text-[13px] font-medium">
+          <div className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide py-3 text-[13px] font-medium">
             {[
               { label: "法人概要", href: "#overview" },
               { label: "代表メッセージ", href: "#message" },
@@ -131,7 +131,7 @@ export default function About() {
                 代表メッセージ
               </h2>
 
-              <div className="bg-[#F7F6F2] border border-[#E5E3DD] p-8 md:p-10" style={{ borderRadius: "2px" }}>
+              <div className="bg-[#F7F6F2] border border-[#E5E3DD] p-6 sm:p-8 md:p-10" style={{ borderRadius: "2px" }}>
                 <div className="flex flex-col sm:flex-row gap-6 mb-8 pb-8 border-b border-[#E5E3DD]">
                   <div
                     className="w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 bg-[#E0DDD8] border border-[#D5D1C8] flex items-center justify-center text-[#9B9B9B] text-[11px]"
@@ -345,17 +345,25 @@ export default function About() {
                 <div className="border border-[#E5E3DD] overflow-hidden">
                   {[
                     { role: "理事", count: "2名", candidate: "松永先生・韓（または矢吹先生）" },
-                    { role: "学識経験者", count: "1〜2名", candidate: "大学教授・研究者（建設経営・労働政策等）" },
+                    { role: "学識経験者", count: "1～2名", candidate: "大学教授・研究者（建設経営・労働政策等）" },
                     { role: "国交省OB", count: "1名", candidate: "総合政策局・建設業政策ラインのOB" },
                   ].map((row, i) => (
                     <div
                       key={row.role}
-                      className="grid grid-cols-[100px_60px_1fr] border-b border-[#E5E3DD] last:border-b-0 text-[13px]"
+                      className="border-b border-[#E5E3DD] last:border-b-0 text-[13px]"
                       style={{ background: i % 2 === 0 ? "white" : "#FAFAF8" }}
                     >
-                      <div className="px-4 py-3 font-semibold text-[#0E1A30] border-r border-[#E5E3DD]">{row.role}</div>
-                      <div className="px-4 py-3 text-[#666] border-r border-[#E5E3DD]">{row.count}</div>
-                      <div className="px-4 py-3 text-[#444]">{row.candidate}</div>
+                      {/* Mobile: stacked */}
+                      <div className="flex sm:hidden flex-col px-4 py-3 gap-1">
+                        <div className="font-semibold text-[#0E1A30]">{row.role}</div>
+                        <div className="text-[#666]">{row.count}　<span className="text-[#444]">{row.candidate}</span></div>
+                      </div>
+                      {/* Desktop: columns */}
+                      <div className="hidden sm:grid grid-cols-[100px_60px_1fr]">
+                        <div className="px-4 py-3 font-semibold text-[#0E1A30] border-r border-[#E5E3DD]">{row.role}</div>
+                        <div className="px-4 py-3 text-[#666] border-r border-[#E5E3DD]">{row.count}</div>
+                        <div className="px-4 py-3 text-[#444]">{row.candidate}</div>
+                      </div>
                     </div>
                   ))}
                 </div>

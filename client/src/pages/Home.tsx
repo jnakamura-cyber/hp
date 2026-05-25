@@ -135,7 +135,7 @@ export default function Home() {
           J-CRAFT
         </div>
 
-        <div className="container relative z-10 py-20">
+        <div className="container relative z-10 py-14 sm:py-20">
           <div ref={heroRef} className="max-w-3xl">
             <div
               className="hero-line inline-flex items-center gap-3 mb-8"
@@ -189,7 +189,7 @@ export default function Home() {
 
           {/* Meta strip */}
           <div
-            className="hero-line mt-16 pt-8 flex flex-wrap gap-8"
+            className="hero-line mt-12 pt-6 grid grid-cols-2 sm:flex sm:flex-wrap gap-5 sm:gap-8"
             style={{
               borderTop: "1px solid rgba(255,255,255,0.15)",
               maxWidth: "680px",
@@ -202,8 +202,8 @@ export default function Home() {
               { label: "会費", value: "無料" },
             ].map((item) => (
               <div key={item.label}>
-                <div className="text-[11px] text-white/55 tracking-wide mb-1">{item.label}</div>
-                <div className="text-[15px] font-semibold text-white">{item.value}</div>
+                <div className="text-[10px] sm:text-[11px] text-white/55 tracking-wide mb-1">{item.label}</div>
+                <div className="text-[14px] sm:text-[15px] font-semibold text-white">{item.value}</div>
               </div>
             ))}
           </div>
@@ -337,26 +337,26 @@ export default function Home() {
 
               <div>
                 <div
-                  className="pt-10 mt-10 grid grid-cols-3 gap-8"
+                  className="pt-8 mt-8 grid grid-cols-3 gap-4 sm:gap-8"
                   style={{ borderTop: "1px solid rgba(255,255,255,0.18)" }}
                 >
                   <div>
-                    <div className="font-serif text-white font-semibold leading-none mb-2" style={{ fontSize: "clamp(32px, 4vw, 48px)" }}>
+                    <div className="font-serif text-white font-semibold leading-none mb-2" style={{ fontSize: "clamp(24px, 4vw, 48px)" }}>
                       <span ref={stat50}>50社</span>
                     </div>
-                    <div className="text-[12px] tracking-wide text-white/65 leading-snug">設立同時の<br />初期認定目標</div>
+                    <div className="text-[11px] sm:text-[12px] tracking-wide text-white/65 leading-snug">設立同時の<br />初期認定目標</div>
                   </div>
                   <div>
-                    <div className="font-serif text-white font-semibold leading-none mb-2" style={{ fontSize: "clamp(28px, 3.5vw, 40px)" }}>
+                    <div className="font-serif text-white font-semibold leading-none mb-2" style={{ fontSize: "clamp(18px, 3.5vw, 40px)" }}>
                       <span ref={stat1000}>1,000万円/年</span>
                     </div>
-                    <div className="text-[12px] tracking-wide text-white/65 leading-snug">CB拠出による<br />初期運営資金</div>
+                    <div className="text-[11px] sm:text-[12px] tracking-wide text-white/65 leading-snug">CB拠出による<br />初期運営資金</div>
                   </div>
                   <div>
-                    <div className="font-serif text-white font-semibold leading-none mb-2" style={{ fontSize: "clamp(32px, 4vw, 48px)" }}>
+                    <div className="font-serif text-white font-semibold leading-none mb-2" style={{ fontSize: "clamp(24px, 4vw, 48px)" }}>
                       <span ref={stat0}>0円</span>
                     </div>
-                    <div className="text-[12px] tracking-wide text-white/65 leading-snug">加盟会費</div>
+                    <div className="text-[11px] sm:text-[12px] tracking-wide text-white/65 leading-snug">加盟会費</div>
                   </div>
                 </div>
               </div>
@@ -379,8 +379,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div
-              className="grid grid-cols-3 md:grid-cols-6 border border-[#E5E3DD]"
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 border border-[#E5E3DD]"
               style={{ gap: "1px", background: "#E5E3DD" }}
             >
               {["company A", "company B", "company C", "company D", "company E", "company F",
@@ -454,15 +453,17 @@ export default function Home() {
               {newsItems.map((item) => (
                 <article
                   key={item.title}
-                  className="grid grid-cols-1 sm:grid-cols-[140px_100px_1fr] gap-3 sm:gap-6 py-6 border-b border-[#E5E3DD] items-baseline"
+                  className="py-5 border-b border-[#E5E3DD]"
                 >
-                  <span className="text-[13px] text-[#6B6B6B] tracking-wide">{item.date}</span>
-                  <span
-                    className="inline-block text-[11px] text-white px-2.5 py-1 text-center tracking-wide self-start"
-                    style={{ background: tagColors[item.tagType] }}
-                  >
-                    {item.tag}
-                  </span>
+                  <div className="flex flex-wrap items-center gap-3 mb-2">
+                    <span className="text-[12px] text-[#6B6B6B] tracking-wide">{item.date}</span>
+                    <span
+                      className="inline-block text-[11px] text-white px-2.5 py-0.5 tracking-wide"
+                      style={{ background: tagColors[item.tagType] }}
+                    >
+                      {item.tag}
+                    </span>
+                  </div>
                   <a href="#" className="text-[15px] text-[#1F1F1F] font-medium leading-relaxed hover:text-[#C8442A] transition-colors no-underline">
                     {item.title}
                   </a>
@@ -485,7 +486,7 @@ export default function Home() {
               <p className="text-[#6B6B6B] text-[15px]">立場に応じた窓口をご用意しています。</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 border-t border-b border-[#E5E3DD]">
+              <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#E5E3DD] border border-[#E5E3DD]">
               {[
                 {
                   for: "FOR COMPANIES",
@@ -505,17 +506,14 @@ export default function Home() {
                   desc: "取材・寄稿・登壇のご依頼、プレスキットのダウンロードはこちらから。",
                   cta: "取材依頼・プレスキット",
                 },
-              ].map((cell, i) => (
+              ].map((cell) => (
                 <a
                   key={cell.for}
                   href="#"
-                  className="block p-10 bg-white hover:bg-[#F7F6F2] transition-colors no-underline group"
-                  style={{
-                    borderRight: i < 2 ? "1px solid #E5E3DD" : undefined,
-                  }}
+                  className="block p-8 sm:p-10 bg-white hover:bg-[#F7F6F2] transition-colors no-underline group"
                 >
                   <span className="block text-[11px] font-semibold tracking-[0.16em] text-[#C8442A] mb-3">{cell.for}</span>
-                  <h3 className="font-serif font-semibold text-[#0E1A30] text-[22px] mb-3 leading-snug">{cell.title}</h3>
+                  <h3 className="font-serif font-semibold text-[#0E1A30] text-[20px] sm:text-[22px] mb-3 leading-snug">{cell.title}</h3>
                   <p className="text-[14px] text-[#6B6B6B] leading-relaxed mb-6">{cell.desc}</p>
                   <span className="text-[13px] font-semibold text-[#0E1A30] group-hover:text-[#C8442A] transition-colors">
                     {cell.cta} <span className="text-[#C8442A]">→</span>

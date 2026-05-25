@@ -94,6 +94,16 @@
   --sidebar-ring: oklch(0.50 0.18 30);
 }
 
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -191,6 +201,40 @@
       opacity: 1;
       transform: none;
       transition: none;
+    }
+  }
+
+  /* Mobile section padding utility */
+  @media (max-width: 639px) {
+    .py-24 {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+    .py-28 {
+      padding-top: 4.5rem;
+      padding-bottom: 4.5rem;
+    }
+    .py-20 {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+    .pt-16 {
+      padding-top: 3rem;
+    }
+  }
+
+  /* Improve tap targets on mobile */
+  @media (max-width: 639px) {
+    a, button {
+      min-height: 44px;
+    }
+    /* Sticky subnav scroll */
+    .overflow-x-auto {
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .overflow-x-auto::-webkit-scrollbar {
+      display: none;
     }
   }
 }
