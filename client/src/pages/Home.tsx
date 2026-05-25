@@ -62,9 +62,9 @@ function useCountUp(target: number, suffix = "") {
 }
 
 const newsItems = [
-  { date: "2026.05.10", tag: "お知らせ", tagType: "default", title: "国土交通省 総合政策局を訪問し、認定制度の経審W点組み込みについて意見交換を行いました" },
-  { date: "2026.04.30", tag: "提言", tagType: "policy", title: "建設業振興基金との非公式打診を開始しました" },
-  { date: "2026.04.15", tag: "イベント", tagType: "event", title: "「職人街コン」を社団主催で開催する方向で関係自治体と調整中です" },
+  { date: "2026.05.19", tag: "お知らせ", tagType: "default", title: "認定制度の論点整理（会員種別・審査フロー・費用体系）を更新しました" },
+  { date: "2026.05.10", tag: "政策提言", tagType: "policy", title: "国土交通省 総合政策局を訪問し、認定制度の経審W点組み込みについて意見交換を行いました" },
+  { date: "2026.04.30", tag: "政策提言", tagType: "policy", title: "建設業振興基金との非公式打診を開始しました" },
   { date: "2026.04.01", tag: "お知らせ", tagType: "default", title: "代表理事・松永昭吾との設立合意書を締結しました" },
 ];
 
@@ -154,7 +154,7 @@ export default function Home() {
                 textShadow: "0 2px 20px rgba(0,0,0,0.35)",
               }}
             >
-              建設職人を、<br />社会の標準で支える。
+              協力会社を支える<br />元請を、認定する。
             </h1>
 
             <p
@@ -164,7 +164,7 @@ export default function Home() {
                 maxWidth: "680px",
               }}
             >
-              専門工事会社の担い手不足は、現場単体では解決できません。地域元請が協力会社を支援する仕組みを民間主導で立ち上げ、認定制度・教育・政策提言を通じて、産業の土台を更新していきます。
+              専門工事会社の採用・育成・DX・安全を支援する地域元請を、第三者確認型の審査体制で認定します。将来の経審W点接続を視野に入れた、民間主導の仕組みです。
             </p>
 
             <div
@@ -228,20 +228,20 @@ export default function Home() {
               {[
                 {
                   num: "01",
-                  title: "協力会社パートナーシップ宣言",
-                  desc: "協力会社の採用・DX支援に取り組む地域元請を認証し、ロゴを付与。将来的に経審W点への加点を目指します。",
+                  title: "協力会社パートナーシップ宣言 認定",
+                  desc: "協力会社の採用・育成・DX・安全を支援する地域元請を、第三者確認型の審査体制で認定。将来の経審W点接続を視野に入れた設計です。",
                   href: "/activities#partnership",
                 },
                 {
                   num: "02",
                   title: "教育・研修・セミナー",
-                  desc: "クラフトバンク総研の講演・研修を社団ブランドで提供。土木学会等のCPD認定プログラムとして登録し、加点につなげる設計。",
+                  desc: "協力会社・職人会員の声を吸い上げる部会を運営。クラフトバンク総研の講演・研修を社団ブランドで提供し、認定基準の改定に現場の声を反映します。",
                   href: "/activities#education",
                 },
                 {
                   num: "03",
                   title: "政策提言",
-                  desc: "国交省・総務省・建設業振興基金との連携を通じ、認証制度の経審W点組み込みなどを推進します。",
+                  desc: "国土交通省・建設業振興基金との連携を通じ、認定制度の経審W点組み込みを推進。建設ディレクターと同様のルートでの制度化を目指します。",
                   href: "/activities#policy",
                 },
               ].map((card) => (
@@ -287,7 +287,7 @@ export default function Home() {
                   協力会社パートナーシップ宣言<br />認定制度
                 </h2>
                 <p className="text-white/80 text-[15px] leading-loose mb-8 max-w-xl">
-                  協力会社の採用・DX支援に本気で取り組む元請企業を、第三者機関として認定します。認定取得は、自社の人材方針を社会に示す客観的な証となります。
+                  A（採用）・B（教育育成）・C（DX）・E（安全環境）の4カテゴリで協力会社を支援する地域元請を、第三者確認型の審査体制で認定。審査料：10万円（申請時）＋年間認証利用料：12万円。
                 </p>
                 <Link
                   href="/certification"
@@ -328,10 +328,10 @@ export default function Home() {
                   現場と、政策と、<br />金融をつなぐ。
                 </h2>
                 <p className="text-white/85 text-[15px] leading-loose mb-4">
-                  担い手不足の解決は、現場・行政・金融の3つを同時に動かさなければ進みません。J-Craftは、地域元請企業の現場知見を集約し、政策と金融の言語に翻訳して制度につなげる役割を担います。
+                  担い手不足の解決は、現場・行政・金融の3点を同時に動かさなければ進みません。J-Craftは、地域元請企業の現場知見を集約し、政策と金融の言語に翻訳して制度につなげる「W点接続」の役割を担います。
                 </p>
                 <p className="text-white/85 text-[15px] leading-loose">
-                  3年以内に、宣言企業を発注者・自治体・金融機関が「当然見る」状態を作ります。
+                  第三者確認型の認定制度を軸に、3年以内に宣言企業を発注者・自治体・金融機関が「当然参照する」状態を目指します。
                 </p>
               </div>
 
@@ -344,13 +344,13 @@ export default function Home() {
                     <div className="font-serif text-white font-semibold leading-none mb-2" style={{ fontSize: "clamp(32px, 4vw, 48px)" }}>
                       <span ref={stat50}>50社</span>
                     </div>
-                    <div className="text-[12px] tracking-wide text-white/65 leading-snug">設立同時の<br />初期認定企業</div>
+                    <div className="text-[12px] tracking-wide text-white/65 leading-snug">設立同時の<br />初期認定目標</div>
                   </div>
                   <div>
                     <div className="font-serif text-white font-semibold leading-none mb-2" style={{ fontSize: "clamp(28px, 3.5vw, 40px)" }}>
                       <span ref={stat1000}>1,000万円/年</span>
                     </div>
-                    <div className="text-[12px] tracking-wide text-white/65 leading-snug">CB拠出による<br />運営資金</div>
+                    <div className="text-[12px] tracking-wide text-white/65 leading-snug">CB拠出による<br />初期運営資金</div>
                   </div>
                   <div>
                     <div className="font-serif text-white font-semibold leading-none mb-2" style={{ fontSize: "clamp(32px, 4vw, 48px)" }}>
@@ -375,7 +375,7 @@ export default function Home() {
                 認定企業
               </h2>
               <p className="text-[#6B6B6B] text-[15px] max-w-xl">
-                設立同時に初期認定として50社を予定。順次拡大し、地域ごとの認定状況を公開していきます。
+                設立後、認定申請を受け付け次第順次掲載します。認定企業は地域・カテゴリ別に公開予定です。
               </p>
             </div>
 

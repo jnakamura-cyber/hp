@@ -1,432 +1,441 @@
-/**
- * Apply (加盟申込フォーム) Page — J-Craft
- * Design: Industrial Elegance — Navy #0E1A30, Rust #C8442A, Cream #F7F6F2
- * 実動フォーム（Formspree経由でメール送信）
+/*
+ * Apply Page — J-Craft
+ * Design: Industrial Elegance
+ * Tone: 実務・行政用語調
+ * Sections: PageHeader → 会員種別選択 → フォーム → 送信確認
  */
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-type FormData = {
-  type: string;
-  company: string;
-  department: string;
-  name: string;
-  email: string;
-  phone: string;
-  prefecture: string;
-  employees: string;
-  interest: string[];
-  message: string;
-  agree: boolean;
-};
+function useReveal(threshold = 0.12) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { el.classList.add("visible"); obs.unobserve(el); } },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return ref;
+}
 
-const INITIAL: FormData = {
-  type: "certification",
-  company: "",
-  department: "",
-  name: "",
-  email: "",
-  phone: "",
-  prefecture: "",
-  employees: "",
-  interest: [],
-  message: "",
-  agree: false,
-};
-
-const PREFECTURES = [
-  "北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県",
-  "茨城県","栃木県","群馬県","埼玉県","千葉県","東京都","神奈川県",
-  "新潟県","富山県","石川県","福井県","山梨県","長野県","岐阜県",
-  "静岡県","愛知県","三重県","滋賀県","京都府","大阪府","兵庫県",
-  "奈良県","和歌山県","鳥取県","島根県","岡山県","広島県","山口県",
-  "徳島県","香川県","愛媛県","高知県","福岡県","佐賀県","長崎県",
-  "熊本県","大分県","宮崎県","鹿児島県","沖縄県",
-];
-
-const INTEREST_OPTIONS = [
-  "協力会社パートナーシップ宣言 認定の申請",
-  "セミナー・研修への参加",
-  "政策提言活動への参画",
-  "賛助会員（法人）への加入",
-  "その他・情報収集",
-];
+type MemberType = "regular" | "craftsmen" | "";
 
 export default function Apply() {
-  const [form, setForm] = useState<FormData>(INITIAL);
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+  const formRef = useReveal();
+  const [memberType, setMemberType] = useState<MemberType>("");
+  const [submitted, setSubmitted] = useState(false);
+  const [agree, setAgree] = useState(false);
 
-  const validate = () => {
-    const e: Partial<Record<keyof FormData, string>> = {};
-    if (!form.company.trim()) e.company = "会社名を入力してください";
-    if (!form.name.trim()) e.name = "担当者名を入力してください";
-    if (!form.email.trim()) e.email = "メールアドレスを入力してください";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "正しいメールアドレスを入力してください";
-    if (!form.prefecture) e.prefecture = "都道府県を選択してください";
-    if (form.interest.length === 0) e.interest = "1つ以上選択してください";
-    if (!form.agree) e.agree = "プライバシーポリシーへの同意が必要です";
-    return e;
+  const [form, setForm] = useState({
+    companyName: "",
+    repName: "",
+    email: "",
+    phone: "",
+    prefecture: "",
+    license: "",
+    employees: "",
+    interest: [] as string[],
+    message: "",
+    // 職人会員用
+    craftType: "",
+    individualOrCompany: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleInterest = (val: string) => {
-    setForm((f) => ({
-      ...f,
-      interest: f.interest.includes(val)
-        ? f.interest.filter((v) => v !== val)
-        : [...f.interest, val],
+  const handleCheckbox = (value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      interest: prev.interest.includes(value)
+        ? prev.interest.filter((v) => v !== value)
+        : [...prev.interest, value],
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const errs = validate();
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs);
-      return;
-    }
-    setErrors({});
-    setStatus("sending");
-
-    // Formspree endpoint — replace with actual endpoint after setup
-    try {
-      const res = await fetch("https://formspree.io/f/placeholder", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          申込種別: form.type === "certification" ? "認定申請" : form.type === "seminar" ? "セミナー参加" : "賛助会員",
-          会社名: form.company,
-          部署名: form.department,
-          担当者名: form.name,
-          メールアドレス: form.email,
-          電話番号: form.phone,
-          都道府県: form.prefecture,
-          従業員数: form.employees,
-          関心事項: form.interest.join("、"),
-          メッセージ: form.message,
-        }),
-      });
-      if (res.ok) {
-        setStatus("success");
-        setForm(INITIAL);
-      } else {
-        setStatus("error");
-      }
-    } catch {
-      setStatus("error");
-    }
+    if (!agree) return;
+    setSubmitted(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const inputClass = (field: keyof FormData) =>
-    `w-full border px-4 py-3 text-[14px] text-[#1F1F1F] bg-white outline-none focus:border-[#0E1A30] transition-colors ${
-      errors[field] ? "border-[#C8442A]" : "border-[#D5D1C8]"
-    }`;
+  const inputClass = "w-full border border-[#D5D1C8] bg-white px-4 py-3 text-[14px] text-[#1F1F1F] focus:outline-none focus:border-[#0E1A30] transition-colors";
 
   return (
     <div className="min-h-screen bg-[#F7F6F2]">
       <Header />
 
-      {/* Page Header */}
-      <div className="bg-[#0E1A30] py-16">
-        <div className="container">
+      <section className="relative pt-[72px] pb-16 bg-[#0E1A30]">
+        <div className="container pt-16 relative z-10">
           <nav className="text-[12px] text-white/60 mb-5 tracking-wide">
             <Link href="/" className="text-white/60 hover:text-white no-underline transition-colors">HOME</Link>
-            <span className="mx-2">／</span>
-            <span>加盟申込・お問い合わせ</span>
+            <span className="mx-2">/</span>
+            <span>加盟申込</span>
           </nav>
-          <div className="flex items-center gap-3 mb-4">
-            <span className="block w-8 h-px bg-[#C8442A]" />
-            <span className="text-[11px] font-semibold tracking-[0.2em] text-[#C8442A] uppercase">Apply / Contact</span>
-          </div>
-          <h1 className="font-serif font-bold text-white mb-4" style={{ fontSize: "clamp(26px, 3.5vw, 40px)" }}>
-            加盟申込・お問い合わせ
+          <h1 className="font-serif font-semibold text-white mb-4 leading-tight" style={{ fontSize: "clamp(28px, 4vw, 42px)" }}>
+            加盟申込フォーム
           </h1>
-          <p className="text-white/70 text-[15px] max-w-2xl leading-relaxed">
-            認定申請・セミナー参加・賛助会員加入・その他のご相談を受け付けています。内容を確認の上、事務局より3営業日以内にご連絡します。
+          <p className="text-white/80 max-w-2xl leading-loose text-[15px]">
+            正会員・職人会員の年会費は無料です。お気軽にお申し込みください。
           </p>
         </div>
-      </div>
+      </section>
 
-      <div className="container py-16 max-w-3xl mx-auto">
+      <section className="py-16 bg-white">
+        <div className="container">
+          <div className="max-w-2xl mx-auto">
 
-        {status === "success" ? (
-          <div className="bg-white border border-[#E8E4DC] px-8 py-12 text-center" style={{ borderRadius: "2px" }}>
-            <div className="w-12 h-12 bg-[#0E1A30] rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M5 13l4 4L19 7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <h2 className="font-serif font-bold text-[#0E1A30] text-[24px] mb-3">送信が完了しました</h2>
-            <p className="text-[#666] text-[15px] leading-loose mb-8">
-              お申し込みありがとうございます。<br />
-              3営業日以内に事務局よりご連絡いたします。
-            </p>
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 bg-[#C8442A] text-white font-semibold px-6 py-3 text-[14px] no-underline hover:bg-[#b03922] transition-colors"
-              style={{ borderRadius: "2px" }}
-            >
-              トップページへ →
-            </Link>
+            {submitted ? (
+              <div className="text-center py-16">
+                <div className="w-16 h-16 bg-[#0E1A30] flex items-center justify-center mx-auto mb-6" style={{ borderRadius: "2px" }}>
+                  <span className="text-white text-[28px]">✓</span>
+                </div>
+                <h2 className="font-serif font-semibold text-[#0E1A30] text-[26px] mb-4">お申し込みを受け付けました</h2>
+                <p className="text-[15px] text-[#444] leading-loose mb-8">
+                  ご入力いただいたメールアドレスに確認メールをお送りします。<br />
+                  事務局（CB総研）より5営業日以内にご連絡いたします。
+                </p>
+                <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 font-semibold text-[14px] text-white no-underline" style={{ background: "#0E1A30", borderRadius: "2px" }}>
+                  トップページへ戻る
+                </Link>
+              </div>
+            ) : (
+              <div ref={formRef} className="reveal">
+
+                {/* 会員種別選択 */}
+                <div className="mb-10">
+                  <h2 className="font-serif font-semibold text-[#0E1A30] text-[20px] mb-2 pl-5 border-l-4 border-[#C8442A]">
+                    会員種別を選択してください
+                  </h2>
+                  <p className="text-[13px] text-[#888] mb-5 pl-5">正会員・職人会員ともに年会費は無料です。</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {[
+                      {
+                        value: "regular" as MemberType,
+                        label: "正会員",
+                        sub: "土木一式または建築一式の建設業許可を有する法人（地域元請建設会社）",
+                        badge: "認定申請資格あり",
+                        badgeColor: "#C8442A",
+                      },
+                      {
+                        value: "craftsmen" as MemberType,
+                        label: "職人会員",
+                        sub: "建設職人・専門工事会社（協力会社）",
+                        badge: "部会参加・意見提出",
+                        badgeColor: "#0E1A30",
+                      },
+                    ].map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => setMemberType(opt.value)}
+                        className="text-left p-5 border-2 transition-all"
+                        style={{
+                          borderColor: memberType === opt.value ? "#0E1A30" : "#E5E3DD",
+                          background: memberType === opt.value ? "#F7F6F2" : "white",
+                          borderRadius: "2px",
+                        }}
+                      >
+                        <div className="flex items-start justify-between mb-2">
+                          <span className="font-serif font-semibold text-[#0E1A30] text-[17px]">{opt.label}</span>
+                          <span className="text-[10px] font-semibold tracking-[0.1em] text-white px-2 py-0.5" style={{ background: opt.badgeColor, borderRadius: "2px" }}>
+                            {opt.badge}
+                          </span>
+                        </div>
+                        <p className="text-[12px] text-[#666] leading-relaxed m-0">{opt.sub}</p>
+                        <div className="mt-3 text-[13px] font-semibold text-[#C8442A]">年会費：無料</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {memberType && (
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="bg-[#F7F6F2] border border-[#E5E3DD] px-5 py-4 text-[13px] text-[#444]" style={{ borderRadius: "2px" }}>
+                      <strong className="text-[#0E1A30]">
+                        {memberType === "regular" ? "正会員" : "職人会員"}
+                      </strong>
+                      としてお申し込みいただきます。
+                      {memberType === "regular" && "加盟後、認定申請（審査料10万円）が可能になります。"}
+                      {memberType === "craftsmen" && "部会への参加・アンケート・意見提出の窓口として活動いただけます。"}
+                    </div>
+
+                    {/* 職人会員：個人 or 法人 */}
+                    {memberType === "craftsmen" && (
+                      <div>
+                        <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
+                          個人・法人の区別 <span className="text-[#C8442A]">*</span>
+                        </label>
+                        <div className="flex gap-4">
+                          {["個人（職人）", "法人（専門工事会社）"].map((opt) => (
+                            <label key={opt} className="flex items-center gap-2 text-[14px] text-[#444] cursor-pointer">
+                              <input
+                                type="radio"
+                                name="individualOrCompany"
+                                value={opt}
+                                checked={form.individualOrCompany === opt}
+                                onChange={handleChange}
+                                className="accent-[#0E1A30]"
+                                required
+                              />
+                              {opt}
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 会社名 / 氏名 */}
+                    <div>
+                      <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
+                        {memberType === "craftsmen" && form.individualOrCompany === "個人（職人）" ? "氏名" : "会社名・法人名"}
+                        <span className="text-[#C8442A] ml-1">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="companyName"
+                        value={form.companyName}
+                        onChange={handleChange}
+                        required
+                        placeholder={memberType === "craftsmen" && form.individualOrCompany === "個人（職人）" ? "山田 太郎" : "株式会社○○建設"}
+                        className={inputClass}
+                        style={{ borderRadius: "2px" }}
+                      />
+                    </div>
+
+                    {/* 担当者名（法人の場合） */}
+                    {!(memberType === "craftsmen" && form.individualOrCompany === "個人（職人）") && (
+                      <div>
+                        <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
+                          担当者名 <span className="text-[#C8442A]">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="repName"
+                          value={form.repName}
+                          onChange={handleChange}
+                          required
+                          placeholder="山田 太郎"
+                          className={inputClass}
+                          style={{ borderRadius: "2px" }}
+                        />
+                      </div>
+                    )}
+
+                    {/* メールアドレス */}
+                    <div>
+                      <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
+                        メールアドレス <span className="text-[#C8442A]">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={form.email}
+                        onChange={handleChange}
+                        required
+                        placeholder="info@example.co.jp"
+                        className={inputClass}
+                        style={{ borderRadius: "2px" }}
+                      />
+                    </div>
+
+                    {/* 電話番号 */}
+                    <div>
+                      <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
+                        電話番号
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={form.phone}
+                        onChange={handleChange}
+                        placeholder="03-0000-0000"
+                        className={inputClass}
+                        style={{ borderRadius: "2px" }}
+                      />
+                    </div>
+
+                    {/* 都道府県 */}
+                    <div>
+                      <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
+                        所在都道府県 <span className="text-[#C8442A]">*</span>
+                      </label>
+                      <select
+                        name="prefecture"
+                        value={form.prefecture}
+                        onChange={handleChange}
+                        required
+                        className={inputClass}
+                        style={{ borderRadius: "2px" }}
+                      >
+                        <option value="">選択してください</option>
+                        {["北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県","茨城県","栃木県","群馬県","埼玉県","千葉県","東京都","神奈川県","新潟県","富山県","石川県","福井県","山梨県","長野県","岐阜県","静岡県","愛知県","三重県","滋賀県","京都府","大阪府","兵庫県","奈良県","和歌山県","鳥取県","島根県","岡山県","広島県","山口県","徳島県","香川県","愛媛県","高知県","福岡県","佐賀県","長崎県","熊本県","大分県","宮崎県","鹿児島県","沖縄県"].map((p) => (
+                          <option key={p} value={p}>{p}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* 正会員：建設業許可番号 */}
+                    {memberType === "regular" && (
+                      <div>
+                        <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
+                          建設業許可番号 <span className="text-[#C8442A]">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="license"
+                          value={form.license}
+                          onChange={handleChange}
+                          required
+                          placeholder="国土交通大臣許可（般-○○）第○○○○○号"
+                          className={inputClass}
+                          style={{ borderRadius: "2px" }}
+                        />
+                        <p className="text-[12px] text-[#888] mt-1">土木一式または建築一式の許可番号をご記入ください。</p>
+                      </div>
+                    )}
+
+                    {/* 職人会員：職種 */}
+                    {memberType === "craftsmen" && (
+                      <div>
+                        <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
+                          職種・専門工事の種別
+                        </label>
+                        <input
+                          type="text"
+                          name="craftType"
+                          value={form.craftType}
+                          onChange={handleChange}
+                          placeholder="例：型枠大工、電気工事、管工事 など"
+                          className={inputClass}
+                          style={{ borderRadius: "2px" }}
+                        />
+                      </div>
+                    )}
+
+                    {/* 従業員数（法人のみ） */}
+                    {!(memberType === "craftsmen" && form.individualOrCompany === "個人（職人）") && (
+                      <div>
+                        <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
+                          従業員数
+                        </label>
+                        <select
+                          name="employees"
+                          value={form.employees}
+                          onChange={handleChange}
+                          className={inputClass}
+                          style={{ borderRadius: "2px" }}
+                        >
+                          <option value="">選択してください</option>
+                          <option value="1-9">1〜9名</option>
+                          <option value="10-29">10〜29名</option>
+                          <option value="30-99">30〜99名</option>
+                          <option value="100-299">100〜299名</option>
+                          <option value="300+">300名以上</option>
+                        </select>
+                      </div>
+                    )}
+
+                    {/* 関心のある取り組み */}
+                    <div>
+                      <label className="block text-[13px] font-semibold text-[#0E1A30] mb-3">
+                        関心のある取り組み（複数選択可）
+                      </label>
+                      <div className="space-y-2">
+                        {(memberType === "regular"
+                          ? [
+                              "協力会社パートナーシップ宣言 認定の取得",
+                              "A：採用支援（合同採用・求人票作成）",
+                              "B：教育・育成支援（研修・資格取得補助）",
+                              "C：DX支援（ツール導入・BIM/CIM）",
+                              "E：安全・環境支援（安全衛生・保険）",
+                              "政策提言・業界標準化への参画",
+                            ]
+                          : [
+                              "部会への参加",
+                              "認定基準改定への意見提出",
+                              "研修・勉強会への参加",
+                              "アンケートへの協力",
+                            ]
+                        ).map((item) => (
+                          <label key={item} className="flex items-center gap-3 text-[14px] text-[#444] cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={form.interest.includes(item)}
+                              onChange={() => handleCheckbox(item)}
+                              className="accent-[#0E1A30] w-4 h-4 flex-shrink-0"
+                            />
+                            {item}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* 備考 */}
+                    <div>
+                      <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
+                        ご質問・備考
+                      </label>
+                      <textarea
+                        name="message"
+                        value={form.message}
+                        onChange={handleChange}
+                        rows={4}
+                        placeholder="ご質問・ご要望があればご記入ください"
+                        className={inputClass}
+                        style={{ borderRadius: "2px", resize: "vertical" }}
+                      />
+                    </div>
+
+                    {/* 同意 */}
+                    <div className="bg-[#F7F6F2] border border-[#E5E3DD] px-5 py-5" style={{ borderRadius: "2px" }}>
+                      <label className="flex items-start gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={agree}
+                          onChange={(e) => setAgree(e.target.checked)}
+                          className="accent-[#0E1A30] w-4 h-4 flex-shrink-0 mt-0.5"
+                        />
+                        <span className="text-[13px] text-[#444] leading-relaxed">
+                          <Link href="/privacy" className="text-[#C8442A] underline">プライバシーポリシー</Link>に同意の上、申し込みます。入力いただいた個人情報は、加盟審査・事務局からのご連絡にのみ使用します。
+                        </span>
+                      </label>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={!agree}
+                      className="w-full py-4 font-semibold text-[15px] text-white transition-all"
+                      style={{
+                        background: agree ? "#0E1A30" : "#B0ADA6",
+                        borderRadius: "2px",
+                        cursor: agree ? "pointer" : "not-allowed",
+                      }}
+                    >
+                      申し込みを送信する
+                    </button>
+
+                    <p className="text-[12px] text-[#888] text-center">
+                      送信後、事務局（CB総研）より5営業日以内にご連絡します。
+                    </p>
+                  </form>
+                )}
+
+              </div>
+            )}
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} noValidate>
-
-            {/* 申込種別 */}
-            <div className="bg-white border border-[#E8E4DC] p-8 mb-6" style={{ borderRadius: "2px" }}>
-              <h2 className="font-serif font-semibold text-[#0E1A30] text-[18px] mb-6 pb-4 border-b border-[#E8E4DC]">
-                お申し込みの種別
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {[
-                  { value: "certification", label: "認定申請", desc: "協力会社パートナーシップ宣言の認定を申請する" },
-                  { value: "seminar", label: "セミナー・研修", desc: "教育プログラムへの参加を希望する" },
-                  { value: "associate", label: "賛助会員", desc: "賛助会員（法人・個人）への加入を希望する" },
-                ].map((opt) => (
-                  <label
-                    key={opt.value}
-                    className={`border p-4 cursor-pointer transition-all ${
-                      form.type === opt.value
-                        ? "border-[#C8442A] bg-[#C8442A]/5"
-                        : "border-[#D5D1C8] hover:border-[#0E1A30]"
-                    }`}
-                    style={{ borderRadius: "2px" }}
-                  >
-                    <input
-                      type="radio"
-                      name="type"
-                      value={opt.value}
-                      checked={form.type === opt.value}
-                      onChange={(e) => setForm({ ...form, type: e.target.value })}
-                      className="sr-only"
-                    />
-                    <div className={`font-semibold text-[14px] mb-1 ${form.type === opt.value ? "text-[#C8442A]" : "text-[#0E1A30]"}`}>
-                      {opt.label}
-                    </div>
-                    <div className="text-[12px] text-[#888] leading-relaxed">{opt.desc}</div>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* 会社・担当者情報 */}
-            <div className="bg-white border border-[#E8E4DC] p-8 mb-6" style={{ borderRadius: "2px" }}>
-              <h2 className="font-serif font-semibold text-[#0E1A30] text-[18px] mb-6 pb-4 border-b border-[#E8E4DC]">
-                会社・担当者情報
-              </h2>
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
-                    会社名 <span className="text-[#C8442A]">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={form.company}
-                    onChange={(e) => setForm({ ...form, company: e.target.value })}
-                    placeholder="株式会社〇〇建設"
-                    className={inputClass("company")}
-                    style={{ borderRadius: "2px" }}
-                  />
-                  {errors.company && <p className="text-[#C8442A] text-[12px] mt-1">{errors.company}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">部署名</label>
-                  <input
-                    type="text"
-                    value={form.department}
-                    onChange={(e) => setForm({ ...form, department: e.target.value })}
-                    placeholder="総務部・経営企画室 など"
-                    className={inputClass("department")}
-                    style={{ borderRadius: "2px" }}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div>
-                    <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
-                      担当者名 <span className="text-[#C8442A]">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={form.name}
-                      onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      placeholder="山田 太郎"
-                      className={inputClass("name")}
-                      style={{ borderRadius: "2px" }}
-                    />
-                    {errors.name && <p className="text-[#C8442A] text-[12px] mt-1">{errors.name}</p>}
-                  </div>
-                  <div>
-                    <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">電話番号</label>
-                    <input
-                      type="tel"
-                      value={form.phone}
-                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                      placeholder="03-0000-0000"
-                      className={inputClass("phone")}
-                      style={{ borderRadius: "2px" }}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
-                    メールアドレス <span className="text-[#C8442A]">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    placeholder="info@example.co.jp"
-                    className={inputClass("email")}
-                    style={{ borderRadius: "2px" }}
-                  />
-                  {errors.email && <p className="text-[#C8442A] text-[12px] mt-1">{errors.email}</p>}
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div>
-                    <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">
-                      都道府県 <span className="text-[#C8442A]">*</span>
-                    </label>
-                    <select
-                      value={form.prefecture}
-                      onChange={(e) => setForm({ ...form, prefecture: e.target.value })}
-                      className={`${inputClass("prefecture")} appearance-none`}
-                      style={{ borderRadius: "2px" }}
-                    >
-                      <option value="">選択してください</option>
-                      {PREFECTURES.map((p) => (
-                        <option key={p} value={p}>{p}</option>
-                      ))}
-                    </select>
-                    {errors.prefecture && <p className="text-[#C8442A] text-[12px] mt-1">{errors.prefecture}</p>}
-                  </div>
-                  <div>
-                    <label className="block text-[13px] font-semibold text-[#0E1A30] mb-2">従業員数</label>
-                    <select
-                      value={form.employees}
-                      onChange={(e) => setForm({ ...form, employees: e.target.value })}
-                      className={`${inputClass("employees")} appearance-none`}
-                      style={{ borderRadius: "2px" }}
-                    >
-                      <option value="">選択してください</option>
-                      {["1〜9名", "10〜29名", "30〜99名", "100〜299名", "300名以上"].map((v) => (
-                        <option key={v} value={v}>{v}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 関心事項 */}
-            <div className="bg-white border border-[#E8E4DC] p-8 mb-6" style={{ borderRadius: "2px" }}>
-              <h2 className="font-serif font-semibold text-[#0E1A30] text-[18px] mb-6 pb-4 border-b border-[#E8E4DC]">
-                ご関心の内容 <span className="text-[#C8442A]">*</span>
-              </h2>
-              <div className="space-y-3">
-                {INTEREST_OPTIONS.map((opt) => (
-                  <label key={opt} className="flex items-start gap-3 cursor-pointer group">
-                    <div
-                      className={`w-5 h-5 flex-shrink-0 border flex items-center justify-center mt-0.5 transition-colors ${
-                        form.interest.includes(opt)
-                          ? "bg-[#C8442A] border-[#C8442A]"
-                          : "border-[#D5D1C8] group-hover:border-[#0E1A30]"
-                      }`}
-                      style={{ borderRadius: "2px" }}
-                    >
-                      {form.interest.includes(opt) && (
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                          <path d="M2 6l3 3 5-5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      )}
-                    </div>
-                    <input
-                      type="checkbox"
-                      className="sr-only"
-                      checked={form.interest.includes(opt)}
-                      onChange={() => handleInterest(opt)}
-                    />
-                    <span className="text-[14px] text-[#444]">{opt}</span>
-                  </label>
-                ))}
-              </div>
-              {errors.interest && <p className="text-[#C8442A] text-[12px] mt-3">{errors.interest}</p>}
-            </div>
-
-            {/* メッセージ */}
-            <div className="bg-white border border-[#E8E4DC] p-8 mb-6" style={{ borderRadius: "2px" }}>
-              <h2 className="font-serif font-semibold text-[#0E1A30] text-[18px] mb-6 pb-4 border-b border-[#E8E4DC]">
-                ご質問・ご要望（任意）
-              </h2>
-              <textarea
-                value={form.message}
-                onChange={(e) => setForm({ ...form, message: e.target.value })}
-                rows={5}
-                placeholder="ご質問、ご要望、現在の状況などをご自由にお書きください。"
-                className="w-full border border-[#D5D1C8] px-4 py-3 text-[14px] text-[#1F1F1F] bg-white outline-none focus:border-[#0E1A30] transition-colors resize-none"
-                style={{ borderRadius: "2px" }}
-              />
-            </div>
-
-            {/* 同意・送信 */}
-            <div className="bg-white border border-[#E8E4DC] p-8" style={{ borderRadius: "2px" }}>
-              <label className="flex items-start gap-3 cursor-pointer mb-6">
-                <div
-                  className={`w-5 h-5 flex-shrink-0 border flex items-center justify-center mt-0.5 transition-colors ${
-                    form.agree ? "bg-[#0E1A30] border-[#0E1A30]" : "border-[#D5D1C8]"
-                  }`}
-                  style={{ borderRadius: "2px" }}
-                >
-                  {form.agree && (
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                      <path d="M2 6l3 3 5-5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  )}
-                </div>
-                <input
-                  type="checkbox"
-                  className="sr-only"
-                  checked={form.agree}
-                  onChange={(e) => setForm({ ...form, agree: e.target.checked })}
-                />
-                <span className="text-[14px] text-[#444] leading-relaxed">
-                  <Link href="/privacy" className="text-[#C8442A] underline hover:no-underline" target="_blank">
-                    プライバシーポリシー
-                  </Link>
-                  に同意の上、送信します。
-                </span>
-              </label>
-              {errors.agree && <p className="text-[#C8442A] text-[12px] mb-4">{errors.agree}</p>}
-
-              {status === "error" && (
-                <div className="bg-[#C8442A]/10 border border-[#C8442A]/30 px-4 py-3 text-[13px] text-[#C8442A] mb-4" style={{ borderRadius: "2px" }}>
-                  送信に失敗しました。しばらく時間をおいてから再度お試しください。
-                </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={status === "sending"}
-                className="w-full bg-[#C8442A] text-white font-semibold py-4 text-[15px] hover:bg-[#b03922] active:scale-[0.99] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-                style={{ borderRadius: "2px" }}
-              >
-                {status === "sending" ? "送信中..." : "送信する →"}
-              </button>
-
-              <p className="text-[12px] text-[#888] text-center mt-4">
-                送信後、3営業日以内に事務局よりご連絡します。
-              </p>
-            </div>
-
-          </form>
-        )}
-      </div>
+        </div>
+      </section>
 
       <Footer />
     </div>
